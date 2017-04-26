@@ -1,0 +1,12 @@
+{
+  "name": "cbusServer",
+  "version": "0.0.3",
+  "private": true,
+  "author": "Nigel Phillips",
+  "scripts": {
+    "start": "node cbusPiServer"
+  },
+  "dependencies": {
+    "socketcan": "^2.1.3"
+  }
+}

@@ -27,16 +27,31 @@ client.connect(NET_PORT, NET_ADDRESS, function () {
 
 client.on('data', function (data) {
 //    data = data.toString();
-    var datastr = data.toString().substr(7,data.toString().length-7);
-    console.log('canPi: ' + datastr);
-    console.log('Length : '+datastr.length);
-    console.log('Sub    : '+datastr.substr(4,4));
-    var dataOut = [];
-    for (var i=0; i < datastr.length-1; i+=2)
-        dataOut.push(parseInt(datastr.substr(i,2),16));
-    var output = {"id":outHeader,"data":Buffer.from(dataOut)};
-    console.log(output);
-    channel.send(output);
+    console.log('Network : '+data.toString());
+    var outMsg = data.toString().split(";"); //Sometimes multiple events appear in a single network package.
+    console.log('Out Message : '+outMsg);
+    for (var i = 0; i < outMsg.length - 1; i++) { //loop through each event.
+        var datastr = outMsg[i].toString().substr(7,outMsg[i].toString().length-7);
+        //console.log('canPi: ' + datastr);
+        //console.log('Length : '+datastr.length);
+        //console.log('Sub    : '+datastr.substr(4,4));
+        var dataOut = [];
+        for (var x=0; x < datastr.length-1; x+=2) {
+           dataOut.push(parseInt(datastr.substr(x,2),16));
+        };
+        var output = {"id":outHeader,"data":Buffer.from(dataOut)};
+	console.log('Client Loop : '+datastr);
+        console.log(output);
+        channel.send(output);
+    };
+});
+
+client.on('error', function(err) {
+    console.log(err);
+});
+
+client.on('end', function(err) {
+    console.log('disconnected from server');
 });
 
 //channel.addListener("onMessage", channel.send, channel);
@@ -77,3 +92,4 @@ var server = net.createServer(function (socket) {
 });
 
 server.listen(NET_PORT);
+

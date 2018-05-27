@@ -9,7 +9,7 @@ To configure the RPI edit /boot/config.txt and add the following to the bottom o
    dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25  
    dtoverlay=spi-bcm2835-overlay 
 ```
-Add the following to /etc/network/inerfaces
+Add the following to /etc/network/interfaces
 ```
    auto can0
    iface can0 can static
